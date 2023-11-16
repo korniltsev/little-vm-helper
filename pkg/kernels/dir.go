@@ -10,7 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"regexp"
-	"runtime"
 
 	"github.com/cilium/little-vm-helper/pkg/logcmd"
 	"github.com/hashicorp/go-multierror"
@@ -202,9 +201,8 @@ func (kd *KernelsDir) buildKernel(ctx context.Context, log *logrus.Logger, kc *K
 		}
 	}
 
-	ncpus := fmt.Sprintf("%d", runtime.NumCPU())
-	if err := logcmd.RunAndLogCommandContext(ctx, log, MakeBinary, "-C", srcDir, "-j", ncpus, "bzImage", "modules"); err != nil {
-		return fmt.Errorf("buiding bzImage && modules failed: %w", err)
+	if err := logcmd.RunAndLogCommandContext(ctx, log, MakeBinary, "-C", srcDir, "-j", "4", "Image", "modules"); err != nil {
+		return fmt.Errorf("buiding Image && modules failed: %w", err)
 	}
 
 	if err := logcmd.RunAndLogCommandContext(ctx, log, MakeBinary, "-C", srcDir, "tar-pkg"); err != nil {

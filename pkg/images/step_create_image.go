@@ -59,7 +59,7 @@ func NewCreateImage(cnf *StepConf) *CreateImage {
 		// boot them by directly specifing -kernel in qemu. Kept this, however, in case at
 		// some point we want to change it. Note, also, that because all images are
 		// bootable, it is sufficient to do create root bootable images.
-		bootable: true,
+		bootable: false,
 	}
 }
 
@@ -85,6 +85,7 @@ func (s *CreateImage) makeRootImage(ctx context.Context) error {
 
 	cmd := exec.CommandContext(ctx, Mmdebstrap,
 		"sid",
+		"--architectures=arm64",
 		"--include", strings.Join(packages, ","),
 		tarFname,
 	)
